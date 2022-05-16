@@ -1,0 +1,16 @@
+{
+  "data_path": "C:\\Users\\Zack's PC\\Documents\\Masters Project\\BIRDS_400",
+  "save_path": "C:\\Users\\Zack's PC\\Documents\\Masters Project\\models\\trial",
+
+  "model": "resnet18",
+  "num_classes": 400,
+
+  "img_size": 224,
+  "batch_size": 64,
+  "workers": 4,
+
+  "lr": 0.05,
+  "epochs": 50,
+  
+  "device": "cuda"
+}
