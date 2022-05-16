@@ -1,0 +1,5 @@
+# The Birds 400 dataset can be downloaded from the following link...
+
+https://www.kaggle.com/datasets/gpiosenka/100-bird-species
+
+# In class_dict.csv, 'BLACK & YELLOW  BROADBILL' at B60 should be changed to 'BLACK & YELLOW BROADBILL'
