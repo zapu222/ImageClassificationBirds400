@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 
 
 def run(args):
-    data, num = args.data, args.num
+    data = args.data
 
     fig = plt.figure(figsize=(14, 10))
 
@@ -27,10 +27,10 @@ def run(args):
 
     random.shuffle(images)
 
-    for i in range(num*num):
+    for i in range(64):
         image = cv2.imread(images[i])
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        fig.add_subplot(num, num, i+1)
+        fig.add_subplot(8, 8, i+1)
         plt.imshow(image)
         plt.axis('off')
 
@@ -45,7 +45,6 @@ def run(args):
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=str, default='', help='path to BIRDS_400')
-    parser.add_argument('--num', type=int, default=8, help='height and width of grid')
 
     args = parser.parse_args()
     return args
