@@ -10,20 +10,14 @@ def run(args):
     data = args.data
 
     fig = plt.figure(figsize=(14, 10))
-
     train = os.path.join(data, "train")
-    valid = os.path.join(data, "valid")
-    test = os.path.join(data, "test")
-
-    splits = [train, valid, test]
     images = []
 
-    for split in splits:
-        folders = os.listdir(os.path.join(data, split))
-        for folder in folders:
-            imgs = os.listdir(os.path.join(data, split, folder))
-            for img in imgs:
-                images.append(os.path.join(data, split, folder, img))
+    folders = os.listdir(os.path.join(data, train))
+    for folder in folders:
+        imgs = os.listdir(os.path.join(data, train, folder))
+        for img in imgs:
+            images.append(os.path.join(data, train, folder, img))
 
     random.shuffle(images)
 
