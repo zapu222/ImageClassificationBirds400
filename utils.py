@@ -24,9 +24,14 @@ def create_model(name, classes):
             model.fc = nn.Linear(input, output)
         return model
         """
+
+        if name == "alexnet":
+            model = models.alexnet()
+            model.fc = nn.Linear(512, classes)
         if name == "resnet18":
             model = models.resnet18()
             model.fc = nn.Linear(512, classes)
         return model
+
     except:
         print("Model name not valid. Try again with valid model name. Models can be added in the create_model function of utils.py.")

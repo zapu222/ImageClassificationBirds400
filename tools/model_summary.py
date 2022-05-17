@@ -1,10 +1,7 @@
-import argparse
 import os
-import json
-import argparse
-
 import sys
 import inspect
+import argparse
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)

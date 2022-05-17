@@ -11,6 +11,7 @@ from utils import create_model
 
 
 def test(args):
+    # Parameters
     data_path, model_path, model, classes, device = \
         args['data_path'], args['model_path'], args['model'], args['classes'], args['device']
 
@@ -20,26 +21,33 @@ def test(args):
     # Testloader
     testloader = DataLoader(testset, batch_size=16, num_workers=2, shuffle=True)
 
+    # Model
     model = create_model(model, classes)
     model.to(device)
 
+    # Load model
     model.load_state_dict(torch.load(model_path))
     model.eval()
 
     # Testing
     correct, total = 0, 0
+
     with torch.no_grad():
         print(f"\n  Testing on {testset.__len__()} images...")
         for _, data in enumerate(tqdm(testloader, 0, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
+            
+            # Images and labels
             inputs, labels = data
             
             if device == "cuda":
                 inputs, labels = inputs.cuda(), labels.cuda()
 
+            # Predictions
             outputs = model(inputs)
 
             _, labels = torch.max(labels.squeeze().data, 1)
             _, predicted = torch.max(outputs.data, 1)
+
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
