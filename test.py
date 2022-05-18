@@ -34,8 +34,8 @@ def test(args):
     # Testing
     correct_1, correct_5, total = 0, 0, 0
     with torch.no_grad():
-        print(f"\nTesting on {testset.__len__()} images...")
-        for _, data in enumerate(tqdm(testloader, 0, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
+        print(f"\nTesting on {testset.__len__()} images")
+        for _, data in enumerate(tqdm(testloader, desc="Testset", bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
             
             inputs, labels = data   # images and labels
             
@@ -57,7 +57,7 @@ def test(args):
     test_acc_1 = correct_1/total
     test_acc_5 = correct_5/total
 
-    print(f"Acc@1: {correct_1} / {total} = {round(100*test_acc_1, 3)} %\t  Acc@5: {correct_5} / {total} = {round(100*test_acc_5, 3)} %")
+    print(f"\nAcc@1: {correct_1} / {total} = {round(100*test_acc_1, 3)} %\nAcc@5: {correct_5} / {total} = {round(100*test_acc_5, 3)} %")
 
 
 def parse_opt():
