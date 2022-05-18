@@ -19,6 +19,7 @@ class Birds400(Dataset):
         self.labels = {}
         for _, row in labels_file.iterrows():
             self.labels[row['class']] = row['class_index']
+        self.indices = {v: k for k, v in self.labels.items()}
 
         self.images = []
         if task == "train":
