@@ -8,11 +8,12 @@ from torch.utils.data import DataLoader
 
 from dataset import Birds400
 from utils import create_model
+from utils import count_parameters
 
 
 def test(args):
     # Parameters
-    data_path, model_path, model, classes, device = \
+    data_path, model_path, model_name, classes, device = \
         args['data_path'], args['model_path'], args['model'], args['classes'], args['device']
 
     # Datasets
@@ -22,8 +23,9 @@ def test(args):
     testloader = DataLoader(testset, batch_size=16, num_workers=2, shuffle=True)
 
     # Model
-    model = create_model(model, classes)
+    model = create_model(model_name, classes)
     model.to(device)
+    print(f"\nModel: {model_name.upper()}\nTrainable parameters: {count_parameters(model)}\nLoaded from: {model_path}")
 
     # Load model
     model.load_state_dict(torch.load(model_path))
@@ -32,7 +34,7 @@ def test(args):
     # Testing
     correct_1, correct_5, total = 0, 0, 0
     with torch.no_grad():
-        print(f"\n  Testing on {testset.__len__()} images...")
+        print(f"\nTesting on {testset.__len__()} images...")
         for _, data in enumerate(tqdm(testloader, 0, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
             
             inputs, labels = data   # images and labels
@@ -55,7 +57,7 @@ def test(args):
     test_acc_1 = correct_1/total
     test_acc_5 = correct_5/total
 
-    print(f"  Acc@1: {correct_1} / {total} = {round(100*test_acc_1, 3)} %\t  Acc@5: {correct_5} / {total} = {round(100*test_acc_5, 3)} %")
+    print(f"Acc@1: {correct_1} / {total} = {round(100*test_acc_1, 3)} %\t  Acc@5: {correct_5} / {total} = {round(100*test_acc_5, 3)} %")
 
 
 def parse_opt():
