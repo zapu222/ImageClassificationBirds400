@@ -1,6 +1,6 @@
 {
-  "data_path": "C:\\Users\\Zack's PC\\Documents\\Masters Project\\BIRDS_400",
-  "save_path": "C:\\Users\\Zack's PC\\Documents\\Masters Project\\models\\trial",
+  "data_path": "...ImageClassificationBirds400\\BIRDS_400",
+  "save_path": "...ImageClassificationBirds400\\models\\resnet18",
 
   "model": "resnet18",
   "num_classes": 400,
