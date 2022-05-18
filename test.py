@@ -16,6 +16,9 @@ def test(args):
     data_path, model_path, model_name, classes, device = \
         args['data_path'], args['model_path'], args['model'], args['classes'], args['device']
 
+    if not os.path.isdir(os.path.join(os.sep.join(os.path.normpath(model_path).split(os.sep)[:-2]), "results\\")):
+        os.mkdir(os.path.join(os.sep.join(os.path.normpath(model_path).split(os.sep)[:-2]), "results\\"))
+
     # Datasets
     testset = Birds400(data_path, task="test")
 

@@ -51,7 +51,7 @@ def train(args):
 
         # Training
         tcorrect_1, tcorrect_5, ttotal = 0, 0, 0
-        for _, data in enumerate(tqdm(trainloader, desc='Trainset ', ascii=True, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
+        for _, data in enumerate(tqdm(trainloader, desc='Trainset', ascii=True, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
             inputs, labels = data   # images and labels
 
             if device == "cuda":
@@ -80,7 +80,7 @@ def train(args):
         # Validation
         vcorrect_1, vcorrect_5, vtotal = 0, 0, 0
         with torch.no_grad():
-            for _, data in enumerate(tqdm(valloader, desc='Validset ', ascii=True, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
+            for _, data in enumerate(tqdm(valloader, desc='Validset', ascii=True, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
                 inputs, labels = data   # images and labels
                 
                 if device == "cuda":
@@ -142,11 +142,10 @@ def train(args):
 
         # Print results
         print(f"Average Loss: {round(avg_tloss, 5)}    ", end="")
-        print(f"Training Acc@1 : {tcorrect_1} / {ttotal} = {round(100*train_acc_1, 3)} %    ", end="")
-        print(f"Validation Acc@1 : {vcorrect_1} / {vtotal} = {round(100*val_acc_1, 3)} %")
+        print(f"Training Acc@1: {tcorrect_1} / {ttotal} = {round(100*train_acc_1, 3)} %    ", end="")
+        print(f"Validation Acc@1: {vcorrect_1} / {vtotal} = {round(100*val_acc_1, 3)} %")
 
-    print('\nFinished Training')
-    print(f'Models and metrics saved to : {save_path}')
+    print(f'\nFinished Training. Models and metrics saved to: {save_path}')
 
 
 def parse_opt():
