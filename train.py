@@ -68,7 +68,7 @@ def train(args):
             running_tloss.append(loss.item())   # append loss 
 
             _, labels = torch.max(labels.squeeze().data, 1)   # labels indices
-            _, top_1 = torch.max(outputs.data, 1)   # top 1 prediction
+            _, top_1 = torch.max(outputs.data, 1)   # top prediction
             _, top_5 = torch.topk(outputs, 5)   # top 5 predictions
 
             ttotal += labels.size(0)   # total predictions
@@ -92,7 +92,7 @@ def train(args):
                 running_vloss.append(loss.item())   # append loss 
 
                 _, labels = torch.max(labels.squeeze().data, 1)   # labels indices
-                _, top_1 = torch.max(outputs.data, 1)   # predicted label indices
+                _, top_1 = torch.max(outputs.data, 1)   # top prediction
                 _, top_5 = torch.topk(outputs, 5)   # top 5 predictions
 
                 vtotal += labels.size(0)   # total predictions

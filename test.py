@@ -30,29 +30,32 @@ def test(args):
     model.eval()
 
     # Testing
-    correct, total = 0, 0
+    correct_1, correct_5, total = 0, 0, 0
     with torch.no_grad():
         print(f"\n  Testing on {testset.__len__()} images...")
         for _, data in enumerate(tqdm(testloader, 0, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
             
-            # Images and labels
-            inputs, labels = data
+            inputs, labels = data   # images and labels
             
             if device == "cuda":
                 inputs, labels = inputs.cuda(), labels.cuda()
 
-            # Predictions
-            outputs = model(inputs)
+            outputs = model(inputs)   # model outputs
 
-            _, labels = torch.max(labels.squeeze().data, 1)
-            _, predicted = torch.max(outputs.data, 1)
+            _, labels = torch.max(labels.squeeze().data, 1)   # label indices
+            _, top_1 = torch.max(outputs.data, 1)   # top prediction
+            _, top_5 = torch.topk(outputs, 5)   # top 5 predictions
 
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
+            total += labels.size(0)   # total predictions
+            correct_1 += (top_1 == labels).sum().item()   # correct predictions
+            for i in range(top_5.shape[0]):
+                if labels[i] in top_5[i]:
+                    correct_5 += 1   # correct predictions @ 5
 
-    test_acc = correct/total
+    test_acc_1 = correct_1/total
+    test_acc_5 = correct_5/total
 
-    print(f"  Accuracy: {correct} / {total} = {round(100*test_acc, 3)} %\n")
+    print(f"  Acc@1: {correct_1} / {total} = {round(100*test_acc_1, 3)} %\t  Acc@5: {correct_5} / {total} = {round(100*test_acc_5, 3)} %")
 
 
 def parse_opt():
