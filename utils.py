@@ -35,3 +35,7 @@ def create_model(name, classes):
 
     except:
         print("Model name not valid. Try again with valid model name. Models can be added in the create_model function of utils.py.")
+
+
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
