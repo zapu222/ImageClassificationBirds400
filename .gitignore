@@ -1,1 +1,6 @@
 BIRDS_400/
+models/
+__pycache__/
+dev.ipynb
+scripts.txt
+.vscode/
