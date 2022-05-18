@@ -6,7 +6,6 @@ import math
 import torch
 import inspect
 import argparse
-import numpy as np
 import torch.nn.functional as F
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -57,7 +56,7 @@ def run(args):
         confs = confs.tolist()
 
 
-        fig, ax = plt.subplots(1)
+        _, ax = plt.subplots(1)
         ax.axis("off")
         ax.imshow(image)
         ax.axis('off')

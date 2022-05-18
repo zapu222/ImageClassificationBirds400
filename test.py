@@ -31,7 +31,6 @@ def test(args):
 
     # Testing
     correct, total = 0, 0
-
     with torch.no_grad():
         print(f"\n  Testing on {testset.__len__()} images...")
         for _, data in enumerate(tqdm(testloader, 0, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):

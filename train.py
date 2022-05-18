@@ -50,8 +50,8 @@ def train(args):
         running_vloss = []   # validation losses
 
         # Training
-        tcorrect, ttotal = 0, 0
-        for _, data in enumerate(tqdm(trainloader, desc='Trainset: ', bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
+        tcorrect_1, tcorrect_5, ttotal = 0, 0, 0
+        for _, data in enumerate(tqdm(trainloader, desc='Trainset ', ascii=True, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
             inputs, labels = data   # images and labels
 
             if device == "cuda":
@@ -68,17 +68,19 @@ def train(args):
             running_tloss.append(loss.item())   # append loss 
 
             _, labels = torch.max(labels.squeeze().data, 1)   # labels indices
-            _, predicted = torch.max(outputs.data, 1)   # predicted label indices
-
-            _, top_5 = torch.topk(outputs, 5)
+            _, top_1 = torch.max(outputs.data, 1)   # top 1 prediction
+            _, top_5 = torch.topk(outputs, 5)   # top 5 predictions
 
             ttotal += labels.size(0)   # total predictions
-            tcorrect += (predicted == labels).sum().item()   # correct predictions
+            tcorrect_1 += (top_1 == labels).sum().item()   # correct predictions @ 1
+            for i in range(top_5.shape[0]):
+                if labels[i] in top_5[i]:
+                    tcorrect_5 += 1   # correct predictions @ 5
     
         # Validation
-        vcorrect, vtotal = 0, 0
+        vcorrect_1, vcorrect_5, vtotal = 0, 0, 0
         with torch.no_grad():
-            for _, data in enumerate(tqdm(valloader, desc='Valset:   ', bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
+            for _, data in enumerate(tqdm(valloader, desc='Validset ', ascii=True, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
                 inputs, labels = data   # images and labels
                 
                 if device == "cuda":
@@ -90,21 +92,27 @@ def train(args):
                 running_vloss.append(loss.item())   # append loss 
 
                 _, labels = torch.max(labels.squeeze().data, 1)   # labels indices
-                _, predicted = torch.max(outputs.data, 1)   # predicted label indices
+                _, top_1 = torch.max(outputs.data, 1)   # predicted label indices
+                _, top_5 = torch.topk(outputs, 5)   # top 5 predictions
 
                 vtotal += labels.size(0)   # total predictions
-                vcorrect += (predicted == labels).sum().item()   # correct predictions
+                vcorrect_1 += (top_1 == labels).sum().item()   # correct predictions
+                for i in range(top_5.shape[0]):
+                    if labels[i] in top_5[i]:
+                        vcorrect_5 += 1   # correct predictions @ 5
 
         # Save model
         torch.save(model.state_dict(), os.path.join(save_path, "weights\last.pth"))
 
         # Training and val accuracy
-        train_acc = tcorrect/ttotal
-        val_acc = vcorrect/vtotal
+        train_acc_1 = tcorrect_1/ttotal
+        train_acc_5 = tcorrect_5/ttotal
+        val_acc_1 = vcorrect_1/vtotal
+        val_acc_5 = vcorrect_5/vtotal
 
         # Save best model
-        if vcorrect/vtotal > best:
-            best = vcorrect/vtotal
+        if vcorrect_1/vtotal > best:
+            best = vcorrect_1/vtotal
             torch.save(model.state_dict(), os.path.join(save_path, "weights\\best.pth"))
 
         # Average training and valid loss for epoch
@@ -112,20 +120,21 @@ def train(args):
         avg_vloss = sum(running_vloss) / len(running_vloss)
 
         # Append stats to log list
-        log.append([epoch+1, avg_tloss, avg_vloss, round(train_acc, 5), round(val_acc, 5)])
-        cols = ['Epoch', 'Avg Train Loss', 'Avg Val Loss', 'Train Acc@1', 'Val Acc@1']
+        log.append([epoch+1, avg_tloss, avg_vloss, round(train_acc_1, 5), round(train_acc_5, 5), round(val_acc_1, 5), round(val_acc_5, 5)])
+        cols = ['Epoch', 'Avg Train Loss', 'Avg Val Loss', 'Train Acc@1', 'Train Acc@5', 'Val Acc@1', 'Val Acc@5']
 
         # Log to csv
         log_df = pd.DataFrame(log, columns=cols)
         log_df.to_csv(os.path.join(save_path, 'log.csv'), index=False)
 
         # Save plots
-        for i in range(1,5):
+        for i in range(1,7):
             x = [item[0] for item in log]
             y = [item[i] for item in log]
 
             fig = plt.figure(figsize=(15,10))
             ax = fig.add_axes([0.1,0.1,0.75,0.75]) # axis starts at 0.1, 0.1
+            ax.set_title(cols[i] + " per Epoch")
             ax.set_xlabel("Epoch")
             ax.set_ylabel(cols[i])
             ax.plot(x, y)
@@ -133,10 +142,11 @@ def train(args):
 
         # Print results
         print(f"Average Loss: {round(avg_tloss, 5)}    ", end="")
-        print(f"Training accuracy: {tcorrect} / {ttotal} = {round(100*train_acc, 3)} %    ", end="")
-        print(f"Validation accuracy: {vcorrect} / {vtotal} = {round(100*val_acc, 3)} %")
+        print(f"Training Acc@1 : {tcorrect_1} / {ttotal} = {round(100*train_acc_1, 3)} %    ", end="")
+        print(f"Validation Acc@1 : {vcorrect_1} / {vtotal} = {round(100*val_acc_1, 3)} %")
 
     print('\nFinished Training')
+    print(f'Models and metrics saved to : {save_path}')
 
 
 def parse_opt():
