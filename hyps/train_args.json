@@ -2,7 +2,8 @@
   "data_path": "...ImageClassificationBirds400\\BIRDS_400",
   "save_path": "...ImageClassificationBirds400\\models\\resnet18",
 
-  "model": "resnet18",
+  "model_type": "resnet18",
+  "pretrained": true,
   "num_classes": 400,
 
   "img_size": 224,

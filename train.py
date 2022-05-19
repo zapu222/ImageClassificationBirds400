@@ -16,8 +16,8 @@ from utils import count_parameters
 
 def train(args):
     # Parameters
-    data_path, save_path, model_name, classes, img_size, batch_size, workers, lr, epochs, device = \
-        args['data_path'], args['save_path'], args['model'], args['num_classes'], args["img_size"],\
+    data_path, save_path, model_type, pretrained, classes, img_size, batch_size, workers, lr, epochs, device = \
+        args['data_path'], args['save_path'], args['model_type'], args['pretrained'], args['num_classes'], args["img_size"],\
             args["batch_size"], args['workers'], args['lr'], args['epochs'], args['device']
 
     # Datasets
@@ -29,9 +29,9 @@ def train(args):
     valloader = DataLoader(valset, batch_size=32, num_workers=workers, shuffle=True)
 
     # Model
-    model = create_model(model_name, classes)
+    model = create_model(model_type, classes, pretrained)
     model.to(device)
-    print(f"\nModel: {model_name.upper()}\nTrainable parameters: {count_parameters(model)}")
+    print(f"\nModel: {model_type.upper()}\nTrainable parameters: {count_parameters(model)}")
 
     # Loss and Optimizer
     criterion = nn.CrossEntropyLoss()

@@ -2,7 +2,7 @@
     "data_path": "...ImageClassificationBirds400\\BIRDS_400",
     "model_path": "...ImageClassificationBirds400\\models\\resnet18\\weights\\best.pth",
 
-    "model": "resnet18",
+    "model_type": "resnet18",
     "classes": 400,
     
     "device": "cuda"

@@ -15,7 +15,7 @@ def augment_image(image):
     return augmented_image
 
 
-def create_model(name, classes):
+def create_model(name, classes, pretrained):
     try:
         # Add models here in a similar fashion...
         """
@@ -26,10 +26,10 @@ def create_model(name, classes):
         """
 
         if name == "alexnet":
-            model = models.alexnet()
+            model = models.alexnet(pretrained=pretrained)
             model.fc = nn.Linear(512, classes)
         if name == "resnet18":
-            model = models.resnet18()
+            model = models.resnet18(pretrained=pretrained)
             model.fc = nn.Linear(512, classes)
         return model
 
