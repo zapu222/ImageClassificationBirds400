@@ -1,6 +1,7 @@
 # Birds 400 Image Classification - Zachary Pulliam
 
 This code was written in order to test various computer vision techniques on the Birds 400 dataset found at https://www.kaggle.com/datasets/gpiosenka/100-bird-species. 
+
 Upon downloading the dataset, in class_dict.csv, "BLACK & YELLOW &nbsp;BROADBILL" at B60 should be changed to "BLACK & YELLOW BROADBILL," and the same for the folders
 'BLACK & YELLOW &nbsp;BROADBILL' within the train, valid, and test folders. 
 
