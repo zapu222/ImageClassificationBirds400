@@ -16,7 +16,7 @@ def main(args):
     model, classes = args.model, args.classes
 
     print("")
-    model = create_model(model, classes)
+    model = create_model(model, classes, pretrained=False)
     model.to('cuda')
     summary(model, (3, 224, 224))
 
