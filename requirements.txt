@@ -1,0 +1,17 @@
+# pip install -r requirements.txt
+
+albumentations
+argparse
+cv2
+inspect
+json
+math
+matplotlib
+numpy
+os
+pandas
+random
+sys
+torch
+torchvision
+tqdm
