@@ -7,6 +7,7 @@
   "num_classes": 400,
 
   "img_size": 224,
+  "augment": true,
   "batch_size": 64,
   "workers": 4,
 

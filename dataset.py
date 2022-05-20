@@ -10,9 +10,10 @@ from utils import augment_image
 
 
 class Birds400(Dataset):
-    def __init__(self, path, task="train", img_size=224):  # path = .\\BIRDS_400
+    def __init__(self, path, task="train", img_size=224, augment=False):  # path = .\\BIRDS_400
         self.task = task
         self.img_size = img_size
+        self.augment = augment
 
         labels_file = pd.read_csv(os.path.join(path, "class_dict.csv"))
 
@@ -44,7 +45,7 @@ class Birds400(Dataset):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = cv2.resize(image, (self.img_size, self.img_size),0,0, cv2.INTER_LINEAR)
 
-        if self.task == "train":
+        if self.augment:
             image = augment_image(image)
         
         transform = ToTensor()

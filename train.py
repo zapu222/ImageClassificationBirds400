@@ -16,12 +16,12 @@ from utils import count_parameters
 
 def train(args):
     # Parameters
-    data_path, save_path, model_type, pretrained, classes, img_size, batch_size, workers, lr, epochs, device = \
+    data_path, save_path, model_type, pretrained, classes, img_size, augment, batch_size, workers, lr, epochs, device = \
         args['data_path'], args['save_path'], args['model_type'], args['pretrained'], args['num_classes'], args["img_size"],\
-            args["batch_size"], args['workers'], args['lr'], args['epochs'], args['device']
+            args['augment'], args["batch_size"], args['workers'], args['lr'], args['epochs'], args['device']
 
     # Datasets
-    trainset = Birds400(data_path, task="train", img_size=img_size)
+    trainset = Birds400(data_path, task="train", img_size=img_size, augment=augment)
     valset = Birds400(data_path, task="valid")
 
     # Train and Valid loaders
