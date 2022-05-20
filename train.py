@@ -147,8 +147,17 @@ def parse_opt():
     with open(opt.args_path, 'r') as f:
         args = json.load(f)
 
-    if not os.path.isdir(args['save_path']):
-        os.mkdir(args['save_path'])
+    i = 2
+    while True:
+        if not os.path.isdir(os.path.join(args['save_path'])):
+            os.mkdir(os.path.join(args['save_path']))
+            break
+        else:
+            if i == 2:
+                args['save_path'] = args['save_path'] + "_" + str(i)
+                i += 1
+            else:
+                args['save_path'] = args['save_path'][:-2] + "_" + str(i)
 
     with open(args['save_path'] + '\\hyp.json', 'w') as g:
         json.dump(args, g, indent=2)
