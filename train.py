@@ -139,6 +139,7 @@ def train(args):
             ax.set_ylabel(cols[i])
             ax.plot(x, y)
             fig.savefig(os.path.join(save_path, cols[i].lower().replace(" ", "_") + '.jpg'))
+            plt.close(fig)
 
         # Print results
         print(f"Average Loss: {round(avg_tloss, 5)}    ", end="")
