@@ -1,6 +1,9 @@
+import os
 import torch.nn as nn
 import albumentations as A
 import torchvision.models as models
+
+from matplotlib import pyplot as plt
 
 
 def augment_image(image):
@@ -17,8 +20,12 @@ def augment_image(image):
 
 def create_model(name, classes, pretrained):
     try:
-        # Add models here in a similar fashion...
         """
+        Current models that can be used...
+        Alexnet, Resnet18, Squeezenet
+
+        Add models here in a similar fashion...
+
         if name == "model"
             model = models.model()
             model.fc = nn.Linear(input, output)
@@ -31,6 +38,9 @@ def create_model(name, classes, pretrained):
         if name == "resnet18":
             model = models.resnet18(pretrained=pretrained)
             model.fc = nn.Linear(512, classes)
+        if name == "squeezenet":
+            model = models.squeezenet1_0(pretrained=pretrained)
+            model.fc = nn.Linear(512, classes)
         return model
 
     except:
@@ -39,3 +49,14 @@ def create_model(name, classes, pretrained):
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+
+def create_plot(i, save_path, x, y, cols):
+    fig = plt.figure(figsize=(15,10))
+    ax = fig.add_axes([0.1,0.1,0.75,0.75]) # axis starts at 0.1, 0.1
+    ax.set_title(cols[i] + " per Epoch")
+    ax.set_xlabel("Epoch")
+    ax.set_ylabel(cols[i])
+    ax.plot(x, y)
+    fig.savefig(os.path.join(save_path, cols[i].lower().replace(" ", "_") + '.jpg'))
+    plt.close(fig)

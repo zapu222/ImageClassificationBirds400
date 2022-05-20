@@ -6,12 +6,10 @@ import pandas as pd
 
 from tqdm import tqdm
 from torch import nn, optim
-from matplotlib import pyplot as plt
 from torch.utils.data import DataLoader
 
 from dataset import Birds400
-from utils import create_model
-from utils import count_parameters
+from utils import count_parameters, create_model, create_plot
 
 
 def train(args):
@@ -32,6 +30,8 @@ def train(args):
     model = create_model(model_type, classes, pretrained)
     model.to(device)
     print(f"\nModel: {model_type.upper()}\nTrainable parameters: {count_parameters(model)}")
+    if not os.path.isdir(os.path.join(save_path, "weights\\")):
+        os.mkdir(os.path.join(save_path, "weights\\"))
 
     # Loss and Optimizer
     criterion = nn.CrossEntropyLoss()
@@ -40,8 +40,7 @@ def train(args):
     # Logging
     log = []
     best = 0
-    if not os.path.isdir(os.path.join(save_path, "weights\\")):
-        os.mkdir(os.path.join(save_path, "weights\\"))
+    cols = ['Epoch', 'Avg Train Loss', 'Avg Val Loss', 'Train Acc@1', 'Train Acc@5', 'Val Acc@1', 'Val Acc@5']
 
     # Begin training...
     for epoch in range(epochs):
@@ -121,7 +120,6 @@ def train(args):
 
         # Append stats to log list
         log.append([epoch+1, avg_tloss, avg_vloss, round(train_acc_1, 5), round(train_acc_5, 5), round(val_acc_1, 5), round(val_acc_5, 5)])
-        cols = ['Epoch', 'Avg Train Loss', 'Avg Val Loss', 'Train Acc@1', 'Train Acc@5', 'Val Acc@1', 'Val Acc@5']
 
         # Log to csv
         log_df = pd.DataFrame(log, columns=cols)
@@ -131,22 +129,14 @@ def train(args):
         for i in range(1,7):
             x = [item[0] for item in log]
             y = [item[i] for item in log]
-
-            fig = plt.figure(figsize=(15,10))
-            ax = fig.add_axes([0.1,0.1,0.75,0.75]) # axis starts at 0.1, 0.1
-            ax.set_title(cols[i] + " per Epoch")
-            ax.set_xlabel("Epoch")
-            ax.set_ylabel(cols[i])
-            ax.plot(x, y)
-            fig.savefig(os.path.join(save_path, cols[i].lower().replace(" ", "_") + '.jpg'))
-            plt.close(fig)
+            create_plot(i, save_path, x, y, cols)
 
         # Print results
         print(f"Average Loss: {round(avg_tloss, 5)}    ", end="")
         print(f"Training Acc@1: {tcorrect_1} / {ttotal} = {round(100*train_acc_1, 3)} %    ", end="")
         print(f"Validation Acc@1: {vcorrect_1} / {vtotal} = {round(100*val_acc_1, 3)} %")
 
-    print(f'\nFinished Training. Models and metrics saved to: {save_path}')
+    print(f'\nFinished Training - Models and metrics saved to: {save_path}')
 
 
 def parse_opt():
