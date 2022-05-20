@@ -6,6 +6,10 @@ import torchvision.models as models
 from matplotlib import pyplot as plt
 
 
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+
 def create_model(name, classes, pretrained):
     try:
         """
@@ -53,10 +57,6 @@ def augment_image(image):
         
     augmented_image = transform(image=image)['image']
     return augmented_image
-
-
-def count_parameters(model):
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 
 def create_plot(i, save_path, x, y, cols):
