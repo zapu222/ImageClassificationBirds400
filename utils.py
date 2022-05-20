@@ -6,18 +6,6 @@ import torchvision.models as models
 from matplotlib import pyplot as plt
 
 
-def augment_image(image):
-    transform = A.Compose([
-            A.HorizontalFlip(p=0.5),
-            A.ShiftScaleRotate(shift_limit=0.1, scale_limit=0.1, rotate_limit=15, p=0.1),
-            A.RandomBrightnessContrast(brightness_limit=0.1, contrast_limit=0.1, brightness_by_max=True, p=0.1),        
-            A.HueSaturationValue(hue_shift_limit=5, sat_shift_limit=5, val_shift_limit=5, p=0.1)
-        ])
-        
-    augmented_image = transform(image=image)['image']
-    return augmented_image
-
-
 def create_model(name, classes, pretrained):
     try:
         """
@@ -34,17 +22,37 @@ def create_model(name, classes, pretrained):
 
         if name == "alexnet":
             model = models.alexnet(pretrained=pretrained)
-            model.fc = nn.Linear(512, classes)
-        if name == "resnet18":
+            model.classifier[6] = nn.Linear(4096, classes)
+            return model
+
+        elif name == "resnet18":
             model = models.resnet18(pretrained=pretrained)
             model.fc = nn.Linear(512, classes)
-        if name == "squeezenet":
-            model = models.squeezenet1_0(pretrained=pretrained)
-            model.fc = nn.Linear(512, classes)
-        return model
+            return model
+
+        elif name == "squeezenet":
+            model = models.squeezenet1_1(pretrained=pretrained)
+            model.classifier._modules["1"] = nn.Conv2d(512, classes, kernel_size=(1, 1))
+            model.num_classes = classes
+            return model
+
+        else:
+            pass
 
     except:
         print("Model name not valid. Try again with valid model name. Models can be added in the create_model function of utils.py.")
+
+
+def augment_image(image):
+    transform = A.Compose([
+            A.HorizontalFlip(p=0.5),
+            A.ShiftScaleRotate(shift_limit=0.1, scale_limit=0.1, rotate_limit=15, p=0.1),
+            A.RandomBrightnessContrast(brightness_limit=0.1, contrast_limit=0.1, brightness_by_max=True, p=0.1),        
+            A.HueSaturationValue(hue_shift_limit=5, sat_shift_limit=5, val_shift_limit=5, p=0.1)
+        ])
+        
+    augmented_image = transform(image=image)['image']
+    return augmented_image
 
 
 def count_parameters(model):
