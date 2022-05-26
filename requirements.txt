@@ -2,6 +2,7 @@
 
 albumentations
 argparse
+csv
 cv2
 inspect
 json
