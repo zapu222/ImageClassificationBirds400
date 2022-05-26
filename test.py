@@ -1,7 +1,9 @@
 import os
+import csv
 import json
 import torch
 import argparse
+import pandas as pd
 
 from tqdm import tqdm
 from torch.utils.data import DataLoader
@@ -14,10 +16,12 @@ from utils import count_parameters
 def test(args):
     # Parameters
     data_path, model_path, model_name, classes, device = \
-        args['data_path'], args['model_path'], args['model'], args['classes'], args['device']
+        args['data_path'], args['model_path'], args['model_type'], args['classes'], args['device']
 
-    if not os.path.isdir(os.path.join(os.sep.join(os.path.normpath(model_path).split(os.sep)[:-2]), "results\\")):
-        os.mkdir(os.path.join(os.sep.join(os.path.normpath(model_path).split(os.sep)[:-2]), "results\\"))
+    save_path = os.path.join(os.sep.join(os.path.normpath(model_path).split(os.sep)[:-4]), "metrics\\", os.path.normpath(model_path).split(os.sep)[-3])
+
+    if not os.path.isdir(save_path):
+        os.mkdir(save_path)
 
     # Datasets
     testset = Birds400(data_path, task="test")
@@ -26,7 +30,7 @@ def test(args):
     testloader = DataLoader(testset, batch_size=16, num_workers=2, shuffle=True)
 
     # Model
-    model = create_model(model_name, classes)
+    model = create_model(model_name, classes, False)
     model.to(device)
     print(f"\nModel: {model_name.upper()}\nTrainable parameters: {count_parameters(model)}\nLoaded from: {model_path}")
 
@@ -38,7 +42,12 @@ def test(args):
     correct_1, correct_5, total = 0, 0, 0
     with torch.no_grad():
         print(f"\nTesting on {testset.__len__()} images")
-        for _, data in enumerate(tqdm(testloader, desc="Testset", bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
+
+        correct_per = testset.labels
+        correct_per = dict.fromkeys(correct_per, 0)
+        total_per = dict.fromkeys(correct_per, 0)
+
+        for _, data in enumerate(tqdm(testloader, desc="Testset", ascii=True, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
             
             inputs, labels = data   # images and labels
             
@@ -57,8 +66,28 @@ def test(args):
                 if labels[i] in top_5[i]:
                     correct_5 += 1   # correct predictions @ 5
 
+            for i, val in enumerate(labels):
+                if labels[i].item() == top_1[i].item():
+                    correct_per[testset.indices[labels[i].item()]] += 1
+                total_per[testset.indices[labels[i].item()]] += 1
+    
+    # Correct per species
+    correct_per = {k: v / total_per[k] for k, v in correct_per.items()}
+
+    # Write correct per species to csv
+    with open(os.path.join(save_path, 'species_results.csv'), 'w', newline='') as f:
+        writer = csv.writer(f)
+        for row in correct_per.items():
+            writer.writerow(row)
+
+    # Accuracy top1 and top5
     test_acc_1 = correct_1/total
     test_acc_5 = correct_5/total
+    log = (['Test Acc@1', test_acc_1], ['Test Acc@5', test_acc_5])
+
+    # Log to csv
+    log_df = pd.DataFrame(log)
+    log_df.to_csv(os.path.join(save_path, 'results.csv'), index=False, header=False)
 
     print(f"\nAcc@1: {correct_1} / {total} = {round(100*test_acc_1, 3)} %\nAcc@5: {correct_5} / {total} = {round(100*test_acc_5, 3)} %")
 
