@@ -1,0 +1,9 @@
+.vscode/
+__pycache__/
+BIRDS_400/
+hyps/
+metrics/
+models/
+MONKEY_10/
+dev.ipynb
+scripts.txt
