@@ -34,13 +34,13 @@ def create_model(name, classes, pretrained):
             model.fc = nn.Linear(512, classes)
             return model
 
-        elif name == "squeezenet":
+        elif name == "squeezenet1_1":
             model = models.squeezenet1_1(pretrained=pretrained)
             model.classifier._modules["1"] = nn.Conv2d(512, classes, kernel_size=(1, 1))
             model.num_classes = classes
             return model
 
-        elif name == "densenet":
+        elif name == "densenet121":
             model = models.densenet121(pretrained=pretrained)
             model.classifier = nn.Linear(1024, classes)
             return model
