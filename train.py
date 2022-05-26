@@ -123,6 +123,9 @@ def train(args):
         avg_tloss = sum(running_tloss) / len(running_tloss)
         avg_vloss = sum(running_vloss) / len(running_vloss)
 
+        # End epoch time
+        end = time.time()
+
         # Append stats to log list
         log.append([epoch+1, end-start, avg_tloss, avg_vloss, round(train_acc_1, 5), round(train_acc_5, 5), round(val_acc_1, 5), round(val_acc_5, 5)])
 
@@ -135,9 +138,6 @@ def train(args):
             x = [item[0] for item in log]
             y = [item[i] for item in log]
             create_plot(i, save_path, x, y, cols)
-
-        # End epoch time
-        end = time.time()
 
         # Print results
         print(f"Time: {round(end-start, 3)}   ", end="")
