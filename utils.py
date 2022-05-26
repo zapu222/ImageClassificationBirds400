@@ -40,6 +40,11 @@ def create_model(name, classes, pretrained):
             model.num_classes = classes
             return model
 
+        elif name == "densenet":
+            model = models.densenet121(pretrained=pretrained)
+            model.classifier = nn.Linear(1024, classes)
+            return model
+
         else:
             pass
 
