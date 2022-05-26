@@ -71,6 +71,10 @@ def create_plot(i, save_path, x, y, cols):
     ax.set_xlabel("Epoch")
     ax.set_ylabel(cols[i])
     ax.plot(x, y)
+    if i == 1 or i == 2:
+        ax.set_ylim(ymax=7)
+    else:
+        ax.set_ylim(ymax=1)
     ax.set_ylim(ymin=0)
     fig.savefig(os.path.join(save_path, cols[i].lower().replace(" ", "_") + '.jpg'))
     plt.close(fig)
