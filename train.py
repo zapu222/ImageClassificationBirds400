@@ -1,6 +1,7 @@
 import os
 import json
 import torch
+import timeit
 import argparse
 import pandas as pd
 
@@ -42,16 +43,18 @@ def train(args):
     # Logging
     log = []
     best = 0
-    cols = ['Epoch', 'Avg Train Loss', 'Avg Val Loss', 'Train Acc@1', 'Train Acc@5', 'Val Acc@1', 'Val Acc@5']
+    cols = ['Epoch', 'Train Time', 'Avg Train Loss', 'Avg Val Loss', 'Train Acc@1', 'Train Acc@5', 'Val Acc@1', 'Val Acc@5']
 
     # Begin training...
     for epoch in range(epochs):
         print(f"\nEpoch: {epoch + 1} of {epochs}")
+
         running_tloss = []   # training losses
         running_vloss = []   # validation losses
 
         # Training
         tcorrect_1, tcorrect_5, ttotal = 0, 0, 0
+        start, end = timeit.timeit(), 0
         for _, data in enumerate(tqdm(trainloader, desc='Trainset', ascii=True, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
             inputs, labels = data   # images and labels
 
@@ -65,6 +68,8 @@ def train(args):
             loss = criterion(outputs, labels.squeeze())   # calculate loss
             loss.backward()   # backpropigation
             optimizer.step()   # optimize
+
+            end = timeit.timeit()   # end train time
 
             running_tloss.append(loss.item())   # append loss 
 
@@ -121,21 +126,23 @@ def train(args):
         avg_vloss = sum(running_vloss) / len(running_vloss)
 
         # Append stats to log list
-        log.append([epoch+1, avg_tloss, avg_vloss, round(train_acc_1, 5), round(train_acc_5, 5), round(val_acc_1, 5), round(val_acc_5, 5)])
+        log.append([epoch+1, end-start, avg_tloss, avg_vloss, round(train_acc_1, 5), round(train_acc_5, 5), round(val_acc_1, 5), round(val_acc_5, 5)])
 
         # Log to csv
         log_df = pd.DataFrame(log, columns=cols)
         log_df.to_csv(os.path.join(save_path, 'log.csv'), index=False)
 
         # Save plots
-        for i in range(1,7):
+        for i in range(2,8):
             x = [item[0] for item in log]
             y = [item[i] for item in log]
             create_plot(i, save_path, x, y, cols)
 
+
         # Print results
-        print(f"Average Loss: {round(avg_tloss, 5)}    ", end="")
-        print(f"Training Acc@1: {tcorrect_1} / {ttotal} = {round(100*train_acc_1, 3)} %    ", end="")
+        print(f"Time: {end-start}   ", end="")
+        print(f"Average Loss: {round(avg_tloss, 5)}   ", end="")
+        print(f"Training Acc@1: {tcorrect_1} / {ttotal} = {round(100*train_acc_1, 3)} %   ", end="")
         print(f"Validation Acc@1: {vcorrect_1} / {vtotal} = {round(100*val_acc_1, 3)} %")
 
     print(f'\nFinished Training - Models and metrics saved to: {save_path}')

@@ -71,7 +71,7 @@ def create_plot(i, save_path, x, y, cols):
     ax.set_xlabel("Epoch")
     ax.set_ylabel(cols[i])
     ax.plot(x, y)
-    if i == 1 or i == 2:
+    if i == 2 or i == 3:
         ax.set_ylim(ymax=7)
     else:
         ax.set_ylim(ymax=1)
