@@ -44,11 +44,11 @@ def test(args):
         print(f"\nTesting on {testset.__len__()} images")
 
         correct_per = testset.labels
-        correct_per = dict.fromkeys(correct_per, 0)
-        total_per = dict.fromkeys(correct_per, 0)
+        correct_per = dict.fromkeys(correct_per, 0)  # correct per species
+        total_per = dict.fromkeys(correct_per, 0)  # total per species
 
         for _, data in enumerate(tqdm(testloader, desc="Testset", ascii=True, bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}')):
-            
+
             inputs, labels = data   # images and labels
             
             if device == "cuda":
@@ -66,7 +66,7 @@ def test(args):
                 if labels[i] in top_5[i]:
                     correct_5 += 1   # correct predictions @ 5
 
-            for i, val in enumerate(labels):
+            for i, _ in enumerate(labels):
                 if labels[i].item() == top_1[i].item():
                     correct_per[testset.indices[labels[i].item()]] += 1
                 total_per[testset.indices[labels[i].item()]] += 1
