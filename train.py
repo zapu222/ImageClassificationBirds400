@@ -18,6 +18,8 @@ def train(args):
         args['data_path'], args['save_path'], args['model_type'], args['pretrained'], args['num_classes'], args["img_size"],\
             args['augment'], args["batch_size"], args['workers'], args['lr'], args['epochs'], args['device']
 
+    print(f'\nBeginning Training - Models and metrics will be saved to: {save_path}')
+
     # Datasets
     trainset = Birds400(data_path, task="train", img_size=img_size, augment=augment)
     valset = Birds400(data_path, task="valid")
@@ -139,25 +141,24 @@ def train(args):
     print(f'\nFinished Training - Models and metrics saved to: {save_path}')
 
 
-def parse_opt():
+def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--args-path', type=str, default='', help='train_args.json path')
 
     opt = parser.parse_args()
     with open(opt.args_path, 'r') as f:
         args = json.load(f)
+    save_path = args['save_path']
 
     i = 2
     while True:
-        if not os.path.isdir(os.path.join(args['save_path'])):
-            os.mkdir(os.path.join(args['save_path']))
+        if not os.path.isdir(os.path.join(save_path)):
+            os.mkdir(os.path.join(save_path))
             break
         else:
-            if i == 2:
-                args['save_path'] = args['save_path'] + "_" + str(i)
-                i += 1
-            else:
-                args['save_path'] = args['save_path'][:-2] + "_" + str(i)
+            save_path = args['save_path'] + "_" + str(i)
+            i += 1
+    args['save_path'] = save_path
 
     with open(args['save_path'] + '\\hyp.json', 'w') as g:
         json.dump(args, g, indent=2)
@@ -165,5 +166,5 @@ def parse_opt():
 
 
 if __name__ == "__main__":
-    args = parse_opt()
+    args = parse_args()
     train(args)

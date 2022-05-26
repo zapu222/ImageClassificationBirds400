@@ -63,7 +63,7 @@ def test(args):
     print(f"\nAcc@1: {correct_1} / {total} = {round(100*test_acc_1, 3)} %\nAcc@5: {correct_5} / {total} = {round(100*test_acc_5, 3)} %")
 
 
-def parse_opt():
+def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--args-path', type=str, default='', help='test_args.json path')
 
@@ -74,5 +74,5 @@ def parse_opt():
 
 
 if __name__ == "__main__":
-    args = parse_opt()
+    args = parse_args()
     test(args)
