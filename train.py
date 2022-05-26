@@ -10,7 +10,7 @@ from torch import nn, optim
 from torch.utils.data import DataLoader
 
 from dataset import Birds400
-from utils import count_parameters, create_model, create_plot
+from utils import count_parameters, create_model, create_plots
 
 
 def train(args):
@@ -134,10 +134,7 @@ def train(args):
         log_df.to_csv(os.path.join(save_path, 'log.csv'), index=False)
 
         # Save plots
-        for i in range(2,8):
-            x = [item[0] for item in log]
-            y = [item[i] for item in log]
-            create_plot(i, save_path, x, y, cols)
+        create_plots(save_path, log)
 
         # Print results
         print(f"Time: {round(end-start, 3)}   ", end="")
@@ -167,7 +164,7 @@ def parse_args():
             i += 1
     args['save_path'] = save_path
 
-    with open(args['save_path'] + '\\hyp.json', 'w') as g:
+    with open(args['save_path'] + '\\hyps.json', 'w') as g:
         json.dump(args, g, indent=2)
     return args
 

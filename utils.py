@@ -14,7 +14,7 @@ def create_model(name, classes, pretrained):
     try:
         """
         Current models that can be used...
-        Alexnet, Resnet18, Squeezenet
+        alexnet, resnet18, squeezenet1_1, densenet121
 
         Add models here in a similar fashion...
 
@@ -29,6 +29,11 @@ def create_model(name, classes, pretrained):
             model.classifier[6] = nn.Linear(4096, classes)
             return model
 
+        elif name == "densenet121":
+            model = models.densenet121(pretrained=pretrained)
+            model.classifier = nn.Linear(1024, classes)
+            return model
+
         elif name == "resnet18":
             model = models.resnet18(pretrained=pretrained)
             model.fc = nn.Linear(512, classes)
@@ -38,11 +43,6 @@ def create_model(name, classes, pretrained):
             model = models.squeezenet1_1(pretrained=pretrained)
             model.classifier._modules["1"] = nn.Conv2d(512, classes, kernel_size=(1, 1))
             model.num_classes = classes
-            return model
-
-        elif name == "densenet121":
-            model = models.densenet121(pretrained=pretrained)
-            model.classifier = nn.Linear(1024, classes)
             return model
 
         else:
@@ -64,6 +64,54 @@ def augment_image(image):
     return augmented_image
 
 
+def create_plots(save_path, log):
+    x = [item[0] for item in log]
+
+    # Loss plot
+    fig = plt.figure(figsize=(15,10))
+    ax = fig.add_axes([0.1,0.1,0.75,0.75]) # axis starts at 0.1, 0.1
+    ax.set_title("Loss per Epoch")
+    ax.set_xlabel("Epoch")
+    ax.set_ylabel("Loss")
+
+    tloss = [item[2] for item in log]
+    vloss = [item[3] for item in log]
+
+    ax.plot(x, tloss)
+    ax.plot(x, vloss)
+
+    ax.legend(['Training Loss', 'Validation Loss'])
+
+    ax.set_ylim(ymax=7)
+    ax.set_ylim(ymin=0)
+    fig.savefig(os.path.join(save_path, 'loss.jpg'))
+    plt.close(fig)
+
+    # Accuracy plot
+    fig = plt.figure(figsize=(15,10))
+    ax = fig.add_axes([0.1,0.1,0.75,0.75]) # axis starts at 0.1, 0.1
+    ax.set_title("Accuracy per Epoch")
+    ax.set_xlabel("Epoch")
+    ax.set_ylabel("Accuracy")
+
+    train_acc_1 = [item[4] for item in log]
+    train_acc_5 = [item[5] for item in log]
+    valid_acc_1 = [item[6] for item in log]
+    valid_acc_5 = [item[7] for item in log]
+
+    ax.plot(x, train_acc_1)
+    ax.plot(x, train_acc_5)
+    ax.plot(x, valid_acc_1)
+    ax.plot(x, valid_acc_5)
+
+    ax.legend(['Train Acc@1', 'Train Acc@5', 'Valid Acc@1', 'Valid Acc@5'])
+
+    ax.set_ylim(ymax=1)
+    ax.set_ylim(ymin=0)
+    fig.savefig(os.path.join(save_path, 'accuracy.jpg'))
+    plt.close(fig)
+
+"""
 def create_plot(i, save_path, x, y, cols):
     fig = plt.figure(figsize=(15,10))
     ax = fig.add_axes([0.1,0.1,0.75,0.75]) # axis starts at 0.1, 0.1
@@ -78,3 +126,4 @@ def create_plot(i, save_path, x, y, cols):
     ax.set_ylim(ymin=0)
     fig.savefig(os.path.join(save_path, cols[i].lower().replace(" ", "_") + '.jpg'))
     plt.close(fig)
+"""
