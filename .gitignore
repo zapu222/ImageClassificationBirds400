@@ -1,6 +1,8 @@
 .vscode/
 __pycache__/
 BIRDS_400/
+metrics/
 models/
+MONKEY_10/
 dev.ipynb
 scripts.txt
