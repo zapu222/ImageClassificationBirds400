@@ -14,13 +14,13 @@ def create_model(name, classes, pretrained):
     try:
         """
         Current models that can be used...
-        alexnet, resnet18, squeezenet1_1, densenet121
+        alexnet, densenet121, densenet169, densenet201, googlenet, mobilenet_v2,
+        resnet18, resnet34, shufflenet_v2_x1_0, and squeezenet1_1 (all models < 25M params)
 
         Add models here in a similar fashion...
 
         if name == "model"
             model = models.model()
-            model.fc = nn.Linear(input, output)
         return model
         """
 
@@ -34,9 +34,39 @@ def create_model(name, classes, pretrained):
             model.classifier = nn.Linear(1024, classes)
             return model
 
+        elif name == "densenet169":
+            model = models.densenet169(pretrained=pretrained)
+            model.classifier = nn.Linear(1664, classes)
+            return model
+
+        elif name == "densenet201":
+            model = models.densenet201(pretrained=pretrained)
+            model.classifier = nn.Linear(1920, classes)
+            return model
+
+        elif name == "googlenet":
+            model = models.googlenet(pretrained=pretrained)
+            model.fc = nn.Linear(1024, classes)
+            return model
+
+        elif name == "mobilenet":
+            model = models.mobilenet_v2(pretrained=pretrained)
+            model.classifier = nn.Sequential(nn.Dropout(p=0.2, inplace=False), nn.Linear(1280, classes))
+            return model
+
         elif name == "resnet18":
             model = models.resnet18(pretrained=pretrained)
             model.fc = nn.Linear(512, classes)
+            return model
+
+        elif name == "resnet34":
+            model = models.resnet34(pretrained=pretrained)
+            model.fc = nn.Linear(512, classes)
+            return model
+
+        elif name == "shufflenet":
+            model = models.shufflenet_v2_x1_0(pretrained=pretrained)
+            model.fc = nn.Linear(1024, classes)
             return model
 
         elif name == "squeezenet1_1":
@@ -110,20 +140,3 @@ def create_plots(save_path, log):
     ax.set_ylim(ymin=0)
     fig.savefig(os.path.join(save_path, 'accuracy.jpg'))
     plt.close(fig)
-
-"""
-def create_plot(i, save_path, x, y, cols):
-    fig = plt.figure(figsize=(15,10))
-    ax = fig.add_axes([0.1,0.1,0.75,0.75]) # axis starts at 0.1, 0.1
-    ax.set_title(cols[i] + " per Epoch")
-    ax.set_xlabel("Epoch")
-    ax.set_ylabel(cols[i])
-    ax.plot(x, y)
-    if i == 2 or i == 3:
-        ax.set_ylim(ymax=7)
-    else:
-        ax.set_ylim(ymax=1)
-    ax.set_ylim(ymin=0)
-    fig.savefig(os.path.join(save_path, cols[i].lower().replace(" ", "_") + '.jpg'))
-    plt.close(fig)
-"""
