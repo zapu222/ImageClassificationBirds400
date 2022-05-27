@@ -14,7 +14,7 @@ def create_model(name, classes, pretrained):
     try:
         """
         Current models that can be used...
-        alexnet, densenet121, densenet169, densenet201, googlenet, mobilenet_v2,
+        alexnet, densenet121, densenet169, densenet201, googlenet, mobilenet_v2, mnasnet1_0
         resnet18, resnet34, shufflenet_v2_x1_0, and squeezenet1_1 (all models < 25M params)
 
         Add models here in a similar fashion...
@@ -49,9 +49,14 @@ def create_model(name, classes, pretrained):
             model.fc = nn.Linear(1024, classes)
             return model
 
+        elif name == "mnasnet1_0":
+            model = models.mnasnet1_0()
+            model.classifier[1] = nn.Linear(1280, 400)
+            return model
+
         elif name == "mobilenet":
             model = models.mobilenet_v2(pretrained=pretrained)
-            model.classifier = nn.Sequential(nn.Dropout(p=0.2, inplace=False), nn.Linear(1280, classes))
+            model.classifier[1] = nn.Linear(1280, 400)
             return model
 
         elif name == "resnet18":
@@ -64,7 +69,7 @@ def create_model(name, classes, pretrained):
             model.fc = nn.Linear(512, classes)
             return model
 
-        elif name == "shufflenet":
+        elif name == "shufflenet_v2_x1_0":
             model = models.shufflenet_v2_x1_0(pretrained=pretrained)
             model.fc = nn.Linear(1024, classes)
             return model
