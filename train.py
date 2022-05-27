@@ -63,7 +63,10 @@ def train(args):
 
             optimizer.zero_grad()   # zero gradients
 
-            outputs = model(inputs)   # model outputs
+            if model_type == 'googlenet':
+                outputs, _, _ = model(inputs)   # model outputs
+            else:
+                outputs = model(inputs)   # model outputs
 
             loss = criterion(outputs, labels.squeeze())   # calculate loss
             loss.backward()   # backpropigation
@@ -90,7 +93,10 @@ def train(args):
                 if device == "cuda":
                     inputs, labels = inputs.cuda(), labels.cuda()
 
-                outputs = model(inputs)   # model outputs
+                if model_type == 'googlenet':
+                    outputs, _, _ = model(inputs)   # model outputs
+                else:
+                    outputs = model(inputs)   # model outputs
 
                 loss = criterion(outputs, labels.squeeze())   # calculate loss
                 running_vloss.append(loss.item())   # append loss 
