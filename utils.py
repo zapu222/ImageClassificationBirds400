@@ -115,7 +115,7 @@ def create_plots(save_path, log):
     ax.plot(x, tloss)
     ax.plot(x, vloss)
 
-    ax.legend(['Training Loss', 'Validation Loss'])
+    ax.legend(['Training Loss', 'Validation Loss'], loc='upper right')
 
     ax.set_ylim(ymax=7)
     ax.set_ylim(ymin=0)
@@ -139,7 +139,7 @@ def create_plots(save_path, log):
     ax.plot(x, valid_acc_1)
     ax.plot(x, valid_acc_5)
 
-    ax.legend(['Train Acc@1', 'Train Acc@5', 'Valid Acc@1', 'Valid Acc@5'])
+    ax.legend(['Train Acc@1', 'Train Acc@5', 'Valid Acc@1', 'Valid Acc@5'], loc='lower right')
 
     ax.set_ylim(ymax=1)
     ax.set_ylim(ymin=0)
