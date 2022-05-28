@@ -15,7 +15,7 @@ from utils import count_parameters
 
 def test(args):
     # Parameters
-    data_path, model_path, model_name, classes, device = \
+    data_path, model_path, model_type, classes, device = \
         args['data_path'], args['model_path'], args['model_type'], args['classes'], args['device']
 
     save_path = os.path.join(os.sep.join(os.path.normpath(model_path).split(os.sep)[:-4]), "metrics\\", os.path.normpath(model_path).split(os.sep)[-3])
@@ -30,9 +30,9 @@ def test(args):
     testloader = DataLoader(testset, batch_size=16, num_workers=2, shuffle=True)
 
     # Model
-    model = create_model(model_name, classes, False)
+    model = create_model(model_type, classes, False)
     model.to(device)
-    print(f"\nModel: {model_name.upper()}\nTrainable parameters: {count_parameters(model)}\nLoaded from: {model_path}")
+    print(f"\nModel: {model_type.upper()}\nTrainable parameters: {count_parameters(model)}\nLoaded from: {model_path}")
 
     # Load model
     model.load_state_dict(torch.load(model_path))
@@ -54,7 +54,10 @@ def test(args):
             if device == "cuda":
                 inputs, labels = inputs.cuda(), labels.cuda()
 
-            outputs = model(inputs)   # model outputs
+            if model_type == 'googlenet':
+                outputs, _, _ = model(inputs)   # model outputs
+            else:
+                outputs = model(inputs)   # model outputs
 
             _, labels = torch.max(labels.squeeze().data, 1)   # label indices
             _, top_1 = torch.max(outputs.data, 1)   # top prediction
