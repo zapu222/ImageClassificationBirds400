@@ -34,8 +34,6 @@ class Birds400(Dataset):
             for img in os.listdir(os.path.join(path, task, folder)):
                 self.images.append([folder, os.path.join(path, task, folder, img)])
 
-        random.shuffle(self.images)
-
     def __len__(self):
         return len(self.images)
 
