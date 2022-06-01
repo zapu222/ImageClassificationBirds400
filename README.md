@@ -9,3 +9,5 @@ Different PyTorch vision models can be trained using train.py. The hyperparamter
 Models will be saved to the folder defined as "save_path" in train_args.json. Ideally save paths would look like "ImageClassificationBirds400\models\resnet18." In this location, the model.pth files are saved in the weights subfolder along with stats and graphs reporting the model's perfomance. Both the best and last model will be saved in the weights subfolder.
 
 Models can then be tested using test.py according to the hyperparameters defined in hyps/test_args.json. The variables "model_path" and "model" should specify the path to the model.pth file and the type of model that the model.pth file represents.
+
+An ensemble of models can be tested using test_ensemble.py according to the hyperparameters defined in hyps/test_ensemble_args.json. Ensemble methods tend to boost accuracy by arround 3-5% on avergae. The variables "models_path" and "models" should specify the paths to the model.pth files and the type of models that the model.pth files represent.
