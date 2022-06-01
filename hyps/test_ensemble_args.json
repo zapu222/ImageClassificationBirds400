@@ -1,0 +1,10 @@
+{
+    "data_path": "...ImageClassificationBirds400\\BIRDS_400",
+    "models_path": ["...ImageClassificationBirds400\\models\\resnet18\\weights\\best.pth", 
+      "...ImageClassificationBirds400\\models\\alexnet\\weights\\best.pth"],
+
+    "models_type": ["resnet18", "alexnet"],
+    "classes": 400,
+    
+    "device": "cuda"
+  }
