@@ -2,7 +2,6 @@ import os
 import cv2
 import sys
 import json
-import math
 import torch
 import inspect
 import argparse
@@ -17,9 +16,6 @@ from torchvision.transforms import ToTensor
 
 from dataset import Birds400
 from utils import create_model
-
-def sigmoid(x):
-    return 1/(1+math.pow(math.e, -x))
 
 def run(args):
     image, data, model, model_path, device = args.image, args.data, args.model, args.model_path, args.device
