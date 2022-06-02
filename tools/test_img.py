@@ -51,7 +51,6 @@ def run(args):
         names = [dataset.indices[i.item()] for i in indxs]
         confs = confs.tolist()
 
-
         _, ax = plt.subplots(1)
         ax.axis("off")
         ax.imshow(image)
