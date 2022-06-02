@@ -93,6 +93,7 @@ def test(args):
     log_df.to_csv(os.path.join(save_path, 'results.csv'), index=False, header=False)
 
     print(f"\nAcc@1: {correct_1} / {total} = {round(100*test_acc_1, 3)} %\nAcc@5: {correct_5} / {total} = {round(100*test_acc_5, 3)} %")
+    print(f"\nMetrics saved to: {save_path}")
 
 
 def parse_args():
