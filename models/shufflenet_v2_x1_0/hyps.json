@@ -1,0 +1,14 @@
+{
+  "data_path": "C:\\Users\\Zack's PC\\Documents\\Masters Project\\BIRDS_400",
+  "save_path": "C:\\Users\\Zack's PC\\Documents\\Masters Project\\models\\shufflenet_v2_x1_0",
+  "model_type": "shufflenet_v2_x1_0",
+  "pretrained": false,
+  "num_classes": 400,
+  "img_size": 224,
+  "augment": true,
+  "batch_size": 64,
+  "workers": 4,
+  "lr": 0.05,
+  "epochs": 50,
+  "device": "cuda"
+}
