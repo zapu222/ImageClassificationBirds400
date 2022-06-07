@@ -68,8 +68,6 @@ def train(args):
                 outputs, _, _ = model(inputs)   # model outputs
             else:
                 outputs = model(inputs)   # model outputs
-            
-            outputs = F.softmax(outputs, dim=1)   # softmax
 
             loss = criterion(outputs, labels.squeeze())   # calculate loss
             loss.backward()   # backpropigation
