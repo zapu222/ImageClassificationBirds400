@@ -7,6 +7,7 @@ import pandas as pd
 
 from tqdm import tqdm
 from torch import nn, optim
+import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
 from dataset import Birds400
@@ -67,6 +68,8 @@ def train(args):
                 outputs, _, _ = model(inputs)   # model outputs
             else:
                 outputs = model(inputs)   # model outputs
+            
+            outputs = F.softmax(outputs, dim=1)   # softmax
 
             loss = criterion(outputs, labels.squeeze())   # calculate loss
             loss.backward()   # backpropigation
