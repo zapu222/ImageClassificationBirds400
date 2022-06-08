@@ -44,6 +44,11 @@ def create_model(name, classes, pretrained):
             model.classifier = nn.Linear(1920, classes)
             return model
 
+        elif name == "efficientnet_b0":
+            model = models.efficientnet_b0(pretrained=pretrained)
+            model.classifier[1] = nn.Linear(1280, 400)
+            return model
+
         elif name == "googlenet":
             model = models.googlenet(pretrained=pretrained)
             model.fc = nn.Linear(1024, classes)
@@ -54,9 +59,19 @@ def create_model(name, classes, pretrained):
             model.classifier[1] = nn.Linear(1280, 400)
             return model
 
-        elif name == "mobilenet":
+        elif name == "mobilenet_v2":
             model = models.mobilenet_v2(pretrained=pretrained)
             model.classifier[1] = nn.Linear(1280, 400)
+            return model
+
+        elif name == "mobilenet_v3_small":
+            model = models.mobilenet_v3_small(pretrained=pretrained)
+            model.classifier[3] = nn.Linear(1280, 400)
+            return model
+
+        elif name == "regnet_y_400mf":
+            model = models.regnet_y_400mf(pretrained=pretrained)
+            model.fc = nn.Linear(440, classes)
             return model
 
         elif name == "resnet18":
