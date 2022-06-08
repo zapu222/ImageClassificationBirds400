@@ -34,16 +34,6 @@ def create_model(name, classes, pretrained):
             model.classifier = nn.Linear(1024, classes)
             return model
 
-        elif name == "densenet169":
-            model = models.densenet169(pretrained=pretrained)
-            model.classifier = nn.Linear(1664, classes)
-            return model
-
-        elif name == "densenet201":
-            model = models.densenet201(pretrained=pretrained)
-            model.classifier = nn.Linear(1920, classes)
-            return model
-
         elif name == "efficientnet_b0":
             model = models.efficientnet_b0(pretrained=pretrained)
             model.classifier[1] = nn.Linear(1280, 400)
@@ -76,11 +66,6 @@ def create_model(name, classes, pretrained):
 
         elif name == "resnet18":
             model = models.resnet18(pretrained=pretrained)
-            model.fc = nn.Linear(512, classes)
-            return model
-
-        elif name == "resnet34":
-            model = models.resnet34(pretrained=pretrained)
             model.fc = nn.Linear(512, classes)
             return model
 
