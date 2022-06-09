@@ -56,7 +56,7 @@ def create_model(name, classes, pretrained):
 
         elif name == "mobilenet_v3_small":
             model = models.mobilenet_v3_small(pretrained=pretrained)
-            model.classifier[3] = nn.Linear(1280, 400)
+            model.classifier[3] = nn.Linear(1024, 400)
             return model
 
         elif name == "regnet_y_400mf":
