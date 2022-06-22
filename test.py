@@ -54,10 +54,7 @@ def test(args):
             if device == "cuda":
                 inputs, labels = inputs.cuda(), labels.cuda()
 
-            if model_type == 'googlenet':
-                outputs, _, _ = model(inputs)   # model outputs
-            else:
-                outputs = model(inputs)   # model outputs
+            outputs = model(inputs)   # model outputs
 
             _, labels = torch.max(labels.squeeze().data, 1)   # label indices
             _, top_1 = torch.max(outputs.data, 1)   # top prediction
