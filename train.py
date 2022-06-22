@@ -7,7 +7,6 @@ import pandas as pd
 
 from tqdm import tqdm
 from torch import nn, optim
-import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
 from dataset import Birds400
