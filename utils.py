@@ -14,8 +14,9 @@ def create_model(name, classes, pretrained):
     try:
         """
         Current models that can be used...
-        alexnet, densenet121, densenet169, densenet201, googlenet, mobilenet_v2, mnasnet1_0
-        resnet18, resnet34, shufflenet_v2_x1_0, and squeezenet1_1 (all models < 25M params)
+        alexnet, densenet121, efficientnet_b0, googlenet, mnasnet1_0, mobilenet_v2,
+        mobilenet_v3_small, regnet_y_400mf, resnet18, shufflenet_v2_x1_0, and squeezenet1_1
+        (all models < 25M params)
 
         Add models here in a similar fashion...
 
