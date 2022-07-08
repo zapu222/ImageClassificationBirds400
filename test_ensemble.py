@@ -19,7 +19,7 @@ def test(args):
     data_path, models_path, models_type, classes, device = \
         args['data_path'], args['models_path'], args['models_type'], args['classes'], args['device']
 
-    save_path = os.path.join(os.sep.join(os.path.normpath(models_path[0]).split(os.sep)[:-4]), "metrics\\ensemble")
+    save_path = os.path.join(os.sep.join(os.path.normpath(models_path[0]).split(os.sep)[:-5]), "metrics\\ensemble")
 
     i, path = 2, save_path
     while True:
