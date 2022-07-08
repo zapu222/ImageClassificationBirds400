@@ -38,7 +38,7 @@ def train(args):
 
     # Loss and Optimizer
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.5)
+    optimizer = optim.SGD(model.parameters(), lr=lr)
 
     # Logging
     log = []
