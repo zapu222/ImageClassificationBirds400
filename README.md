@@ -1,6 +1,6 @@
 # Birds 400 Image Classification - Zachary Pulliam
 
-*The code found in this repo was used for my Data Science Capstone project at the University of Kentucky. A report of my project is also found here under **Report.pdf**. 
+*The code found in this repo was used for my Data Science Capstone project at the University of Kentucky. A report of my project is also found here under **Report.pdf**.*
 
 This code was written in order to test various PyTorch image classification techniques on the Birds 400 dataset found at https://www.kaggle.com/datasets/gpiosenka/100-bird-species. Upon downloading the dataset, in class_dict.csv, "BLACK & YELLOW &nbsp;BROADBILL" at B60 should be changed to "BLACK & YELLOW BROADBILL" (one space rather than two).
 
